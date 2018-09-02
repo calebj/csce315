@@ -1,4 +1,3 @@
-import pathlib
 import pkg_resources
 import sqlite3
 from typing import Type, Optional
@@ -18,7 +17,7 @@ class GameDB:
 
     Parameters
     ----------
-    database_uri : str
+    database_path : str
         The URI to connect to with SQLite. Pass ":memory:" to use in-memory DB.
     parser_cls : Optional[Type[CommandParser]]
         The class containing the parser commands. Must be a subclass of CommandParser.
@@ -32,10 +31,10 @@ class GameDB:
     """
 
     def __init__(
-        self, database_uri: str, parser_cls: Type[CommandParser] = GameDBCommandParser
+        self, database_path: str, parser_cls: Type[CommandParser] = GameDBCommandParser
     ) -> None:
         # The database connection handle
-        self.db = sqlite3.connect(database_uri)
+        self.db = sqlite3.connect(database_path)
 
         # Turn on foreign keys and execute DDL script
         self.db.execute("PRAGMA foreign_keys = ON;")

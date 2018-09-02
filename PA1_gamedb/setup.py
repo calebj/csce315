@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-with open('requirements.txt') as f:
+with open("requirements.txt") as f:
     requirements = f.read().splitlines()
 
 setup(
@@ -14,5 +14,5 @@ setup(
     install_requires=requirements,
     entry_points={"console_scripts": ["gamedb = gamedb.command:main"]},
     package_data={"gamedb": ["data/init.sql"]},
-    python_requires='>=3.6',
+    python_requires=">=3.6",
 )

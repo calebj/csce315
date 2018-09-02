@@ -8,8 +8,14 @@ from .parser_base import CommandParser, decorate_command
 # ParseElements for the various argument types
 ###############################################
 
+# A positive-only, unsigned integer (no + allowed)
 ID_TOK = pp.Word(pp.nums).setParseAction(lambda l: int(l[0]))
-INT_TOK = (pp.Optional("-") + ID_TOK).setParseAction(lambda l: int(l[0]))
+ID_TOK.setName("unsigned integer")
+
+# Any signed integer (-/+ allowed but optional)
+OPT_SIGN = pp.Optional(pp.Word("+-", exact=1))
+INT_TOK = (OPT_SIGN + ID_TOK).setParseAction(lambda l: int(l[0]))
+INT_TOK.leaveWhitespace().setName("signed integer")
 
 # Quoted string by spec, uncomment the rest to work on unquoted strings.
 NAME_TOK = pp.QuotedString('"')  # | pp.Word(pp.alphas8bit + pp.printables)

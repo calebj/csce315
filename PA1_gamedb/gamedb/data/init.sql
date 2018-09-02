@@ -93,7 +93,7 @@ CREATE VIEW IF NOT EXISTS friendship AS
 -- CAVEAT: the row count of a view insert is always 0, since
 -- operations inside triggers aren't counted.
 
-CREATE TRIGGER friendship_ordered_insert
+CREATE TRIGGER IF NOT EXISTS friendship_ordered_insert
     INSTEAD OF INSERT ON friendship BEGIN
         INSERT INTO friendship_raw (left_side, right_side)
         VALUES (

@@ -89,7 +89,12 @@ class ParserCommand:
         command_element = command_element.setResultsName("command_name")
 
         for arg_name, arg_element in self.params.items():
-            element = WS_TOK - arg_element.setResultsName(arg_name).setName(arg_name)
+            if hasattr(arg_element, "name"):
+                display_name = f"{arg_name} ({arg_element.name})"
+            else:
+                display_name = arg_name
+
+            element = WS_TOK - arg_element.setResultsName(arg_name).setName(display_name)
 
             # If element is optional, make WS + element optional
             if isinstance(arg_element, pp.Optional):
