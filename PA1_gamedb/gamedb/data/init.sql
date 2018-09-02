@@ -77,7 +77,7 @@ CREATE INDEX IF NOT EXISTS friendship_right_side_idx ON friendship_raw(right_sid
 -- SQLite optimizes the WHERE clause here to have equivalent performance
 -- to a regular SELECT FROM friendship_raw in terms of time complexity.
 
-CREATE VIEW IF NOT EXISTS friendship(player_id, friend_id) AS
+CREATE VIEW IF NOT EXISTS friendship AS
     SELECT 
         left_side AS player_id,
         right_side AS friend_id
@@ -106,9 +106,8 @@ CREATE TRIGGER friendship_ordered_insert
 -- If the player has an entry in player_game but no victories, their score is 0.
 -- SQLite will optimize this query using any WHERE clause used.
 
-CREATE VIEW IF NOT EXISTS per_game_totals_view(
-    player_id, game_id, n_earned_victories, game_score
-) AS SELECT 
+CREATE VIEW IF NOT EXISTS per_game_totals_view AS
+    SELECT
         pg.player_id as player_id,
         pg.game_id as game_id,
         SUM(CASE WHEN v.id IS NULL THEN 0 ELSE 1 END) as n_earned_victories,
