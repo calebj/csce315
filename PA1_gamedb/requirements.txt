@@ -1,0 +1,4 @@
+attrs>=18.0.0
+pyparsing>=2.0.1
+setuptools>=38.0.0
+tabulate>=0.8.0
