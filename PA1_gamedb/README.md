@@ -1,10 +1,10 @@
 # GameDB
 
 ## Installation:
-The project is a standard Python package, and can be installed with `pip install .` or `python3 setup.py install`.
+The project is a standard Python package, and can be installed with `python3.6 -m pip install .` or `python3.6 setup.py install`. To install only the requirements, use `python3.6 -m pip install -r requirements.txt`.
 
 ## Usage:
-Invoke the entrypoint with `gamedb` once installed, or the module with `python3 -m gamedb`.
+Invoke the entrypoint with `gamedb` once installed, or the module with `python3.6 -m gamedb`.
 The latter command works even without having installed the package.
 
 ## Components:
