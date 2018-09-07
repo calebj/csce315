@@ -62,15 +62,13 @@ class GameDB:
 
         return row[0] if row else None
 
-    def get_victory_name(self, victory_id: int, game_id: int = None) -> Optional[str]:
-        "Returns the name associated with a victory ID (and optional game), or None if not found."
-        sql = "SELECT name FROM victory WHERE id = ? "
-        params = [victory_id]
+    def get_victory_name(self, game_id: int, victory_id: int) -> Optional[str]:
+        """
+        Returns the name associated with the provided game and victory IDs, or None if not found.
+        """
 
-        if game_id is not None:
-            sql += "AND game_id = ?"
-            params.append(game_id)
-
-        row = self.db.execute(sql, params).fetchone()
+        row = self.db.execute(
+            "SELECT name FROM victory WHERE game_id = ? AND id = ?", (game_id, victory_id)
+        ).fetchone()
 
         return row[0] if row else None

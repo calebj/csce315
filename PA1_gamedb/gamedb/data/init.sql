@@ -15,10 +15,11 @@ CREATE TABLE IF NOT EXISTS game(
 -- Table of victories. Points are not optional.
 
 CREATE TABLE IF NOT EXISTS victory(
-    id INTEGER NOT NULL PRIMARY KEY,
+    id INTEGER NOT NULL,
     game_id INTEGER NOT NULL,
     name STRING NOT NULL,
     points INTEGER NOT NULL,
+    PRIMARY KEY (id, game_id),
     FOREIGN KEY (game_id) REFERENCES game(id)
 );
 
@@ -42,16 +43,18 @@ CREATE INDEX IF NOT EXISTS player_game_game_id_idx ON player_game(game_id);
 
 CREATE TABLE IF NOT EXISTS player_victory(
     player_id INTEGER NOT NULL,
+    game_id INTEGER NOT NULL,
     victory_id INTEGER NOT NULL,
     FOREIGN KEY (player_id) REFERENCES player(id),
-    FOREIGN KEY (victory_id) REFERENCES victory(id),
-    PRIMARY KEY (player_id, victory_id)
+    FOREIGN KEY (game_id, victory_id) REFERENCES victory(game_id, id),
+    PRIMARY KEY (player_id, victory_id, game_id)
 );
 
 -- Indexes for individual player_victory columns
 
 CREATE INDEX IF NOT EXISTS player_victory_player_id_idx ON player_victory(player_id);
 CREATE INDEX IF NOT EXISTS player_victory_victory_id_idx ON player_victory(victory_id);
+CREATE INDEX IF NOT EXISTS player_victory_victory_game_ids_idx ON player_victory(victory_id, game_id);
 
 -- Mapping between players to define friendship. Each relationship
 -- is stored once, and the left ID must be the lower value.

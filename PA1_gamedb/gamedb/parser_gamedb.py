@@ -164,20 +164,24 @@ class GameDBCommandParser(CommandParser):
         Usage: WinVictory <Player ID> <Game ID> <Victory ID>
         """
         player_name = self.parent.get_player_name(player_id)
-        victory_name = self.parent.get_victory_name(victory_id, game_id=game_id)
+        game_name = self.parent.get_game_name(game_id)
+        victory_name = self.parent.get_victory_name(game_id, victory_id)
 
         if player_name is None:
             print_err(f"Player #{player_id} is not in the database!")
             return
+        elif game_name is None:
+            print_err(f"Game #{game_id} is not in the database!")
+            return
         elif victory_name is None:
-            print_err(f"Victory #{victory_id} is not in the database!")
+            print_err(f"Victory #{victory_id} for {game_name} is not in the database!")
             return
 
         with self.parent.db as conn:
             try:
                 conn.execute(
-                    "INSERT INTO player_victory (player_id, victory_id) VALUES (?, ?);",
-                    (player_id, victory_id),
+                    "INSERT INTO player_victory (player_id, game_id, victory_id) VALUES (?, ?, ?);",
+                    (player_id, game_id, victory_id),
                 )
                 print(f"Added '{victory_name}' to {player_name}'s victories.")
             except IntegrityError:
@@ -400,7 +404,7 @@ class GameDBCommandParser(CommandParser):
         Usage: SummarizeVictory <Game ID> <Victory ID>
         """
         game_name = self.parent.get_game_name(game_id)
-        victory_name = self.parent.get_victory_name(victory_id, game_id)
+        victory_name = self.parent.get_victory_name(game_id, victory_id)
 
         if game_name is None:
             print_err(f"Game #{game_id} is not in the database!")
@@ -425,13 +429,16 @@ class GameDBCommandParser(CommandParser):
                 (victory_id,),
             ).fetchall()
 
-            percent_earned = round(100 * len(rows) / total_players, 2)
-            print(f"{percent_earned}% of all {game_name} players have earned {victory_name}:\n")
+            if total_players > 0:
+                percent_earned = round(100 * len(rows) / total_players, 2)
+                print(f"{percent_earned}% of all {game_name} players have earned {victory_name}:\n")
+            else:
+                print(f"There are no registered players for {game_name}.")
 
             if rows:
                 print(generate_numbered_table(rows, headers=("Player", "Score")))
             else:
-                print("No results.")
+                print(f"No players have earned {victory_name}.")
 
     @decorate_command("VictoryRanking")
     def cmd_victory_ranking(self):
