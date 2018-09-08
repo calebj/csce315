@@ -8,7 +8,7 @@ Invoke the entrypoint with `gamedb` once installed, or the module with `python3.
 The latter command works even without having installed the package.
 
 ## Components:
-- [`data/init.sql1](gamedb/data/init.sql) - DDL for the data tables and views
+- [`data/init.sql`](gamedb/data/init.sql) - DDL for the data tables and views
 - [`__init__.py`](gamedb/__init__.py) - includes top-level imports for the package
 - [`__main__.py`](gamedb/__main__.py) - invoked with `python -m gamedb`, calls `command.main()`
 - [`command.py`](gamedb/command.py) - contains the interactive prompt loop and error display
